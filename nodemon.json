@@ -1,0 +1,9 @@
+{
+  "env": {
+    "DB_USER": "Fardeen",
+    "DB_PASSWORD": "X7yVAIIy76xGzUll",
+    "DB_NAME": "PlacesProjectDB",
+    "LOCATION_API_KEy": "SwjXgMdOKKOLpdCpHq3jzjRqIfD4SSCsFEtiujiz8jPeTyxLdBLPOWdihI4oRYqR",
+    "JWT_KEY": "Allah_is_the_Greatest"
+  }
+}
