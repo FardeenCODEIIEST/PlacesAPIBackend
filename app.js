@@ -5,6 +5,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+require("dotenv").config();
+
 const placesRoutes = require("./routes/places-routes");
 const HttpError = require("./models/http-error");
 const userRoutes = require("./routes/users-routes");
