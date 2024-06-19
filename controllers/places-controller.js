@@ -60,13 +60,14 @@ const createPlace = async (req, res, next) => {
     );
   }
 
-  const { title, description, address } = req.body;
-
+  const { title, description, address, image } = req.body;
   let coordinates;
   try {
     coordinates = await getCoordsForAddress(address);
   } catch (error) {
-    return next(error);
+    return next(
+      new HttpError("Could not get the coordinates, please try again", 500)
+    );
   }
 
   const createdPlace = new Place({
@@ -74,7 +75,7 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image: req.file.path,
+    image,
     creator: req.userData.userId,
   });
 
@@ -161,8 +162,6 @@ const deletePlaceById = async (req, res, next) => {
     return next(new HttpError("You are not allowed to delete this place", 401));
   }
 
-  const imagePath = place.image;
-
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -176,10 +175,6 @@ const deletePlaceById = async (req, res, next) => {
       500
     );
   }
-
-  fs.unlink(imagePath, (err) => {
-    console.log(err);
-  });
 
   res.status(200).json({
     message: "Deleted the place",

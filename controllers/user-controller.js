@@ -22,14 +22,13 @@ const getUsers = async (req, res, next) => {
 
 const singup = async (req, res, next) => {
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
     return next(
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, image } = req.body;
 
   let existingUser;
   try {
@@ -52,7 +51,7 @@ const singup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image: req.file.path,
+    image,
     password: hashedPassword,
     places: [],
   });
@@ -60,7 +59,6 @@ const singup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (err) {
-    console.log(err);
     const error = new HttpError("Signup failed, please try again", 500);
     return next(error);
   }
