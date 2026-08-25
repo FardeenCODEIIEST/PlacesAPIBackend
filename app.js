@@ -55,12 +55,21 @@ app.use((error, req, res, next) => {
   });
 });
 
+// Hosting platforms (Render, Railway, Heroku) assign the port at runtime and
+// route external traffic to it. Binding a hard-coded port makes the service
+// unreachable no matter how healthy the process is.
+const PORT = process.env.PORT || 5000;
+
 mongoose
   .connect(url)
   .then(() => {
-    console.log("Connection successful, server listening on port 5000");
-    app.listen(5000);
+    app.listen(PORT, () => {
+      console.log(`Connection successful, server listening on port ${PORT}`);
+    });
   })
   .catch((err) => {
-    console.log(err);
+    // Exit loudly. Logging and staying alive leaves a running process with no
+    // listening socket, which the platform reports only as "no open ports".
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
   });
